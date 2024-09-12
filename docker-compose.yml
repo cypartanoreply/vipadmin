@@ -15,6 +15,9 @@ services:
       - webnet
 
   nginx:
+    build:
+        context: .
+        dockerfile: Dockerfile.nginx  # Ensure this matches the actual file name
     image: nginx:latest
     container_name: nginx
     ports:
