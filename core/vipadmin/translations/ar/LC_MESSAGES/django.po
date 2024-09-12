@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-04 22:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: CypartaGraphqlSubscriptionsTools/apps.py:6
+msgid "CypartaGraphqlSubscriptionsTools"
+msgstr "ابليكشن الريل تيم"
+
+#: vipadmin/apps.py:8
+msgid "vipadmin"
+msgstr "لوحة تحكم الادمن"
+
+#: vipadmin/models.py:69 vipadmin/models.py:70
+msgid "AllTypeModel"
+msgstr "جدول كل الانواع"
+
+#: vipadmin/models.py:72
+msgid "Big Integer Field"
+msgstr "حقل عدد صحيح كبير"
+
+#: vipadmin/models.py:73
+msgid "Boolean Field"
+msgstr "حقل منطقي"
+
+#: vipadmin/models.py:74
+msgid "Character Field"
+msgstr "حقل حرفي"
+
+#: vipadmin/models.py:74
+msgid "ahmed"
+msgstr "أحمد"
+
+#: vipadmin/models.py:75
+msgid "Date Field"
+msgstr "حقل تاريخ"
+
+#: vipadmin/models.py:76
+msgid "Datetime Field"
+msgstr "حقل تاريخ ووقت"
+
+#: vipadmin/models.py:77
+msgid "Decimal Field"
+msgstr "حقل عشري"
+
+#: vipadmin/models.py:78
+msgid "Duration Field"
+msgstr "حقل مدة"
+
+#: vipadmin/models.py:79
+msgid "Email Field"
+msgstr "حقل بريد إلكتروني"
+
+#: vipadmin/models.py:80
+msgid "File Field"
+msgstr "حقل ملف"
+
+#: vipadmin/models.py:81
+msgid "Float Field"
+msgstr "حقل عدد عشري"
+
+#: vipadmin/models.py:82
+msgid "Image Field"
+msgstr "حقل صورة"
+
+#: vipadmin/models.py:83
+msgid "Integer Field"
+msgstr "حقل عدد صحيح"
+
+#: vipadmin/models.py:84
+msgid "Generic IP Address Field"
+msgstr "حقل عنوان IP عام"
+
+#: vipadmin/models.py:85
+msgid "Positive Big Integer Field"
+msgstr "حقل عدد صحيح كبير إيجابي"
+
+#: vipadmin/models.py:86
+msgid "Positive Integer Field"
+msgstr "حقل عدد صحيح إيجابي"
+
+#: vipadmin/models.py:87
+msgid "Positive Small Integer Field"
+msgstr "حقل عدد صحيح صغير إيجابي"
+
+#: vipadmin/models.py:88
+msgid "Slug Field"
+msgstr "حقل تسلسلي"
+
+#: vipadmin/models.py:89
+msgid "Small Auto Field"
+msgstr "حقل عدد صغير تلقائي"
+
+#: vipadmin/models.py:90
+msgid "Small Integer Field"
+msgstr "حقل عدد صغير"
+
+#: vipadmin/models.py:91
+msgid "Text Field"
+msgstr "حقل نصي"
+
+#: vipadmin/models.py:92
+msgid "Time Field"
+msgstr "حقل وقت"
+
+#: vipadmin/models.py:93
+msgid "URL Field"
+msgstr "حقل رابط URL"
+
+#: vipadmin/models.py:94
+msgid "UUID Field"
+msgstr "حقل UUID"
+
+#: vipadmin/models.py:95
+msgid "JSON Field"
+msgstr "حقل JSON"
+
+#: vipadmin/models.py:96
+msgid "Auto Slug Field"
+msgstr "حقل تسلسلي تلقائي"
+
+#: vipadmin/models.py:97
+msgid "Foreign Key Field"
+msgstr "حقل مفتاح خارجي"
+
+#: vipadmin/models.py:98
+msgid "One-to-One Field"
+msgstr "حقل واحد-إلى-واحد"
+
+#: vipadmin/models.py:99
+msgid "Many-to-Many Field"
+msgstr "حقل كثير-إلى-كثير"
+
+#: vipadmin/models.py:103
+msgid "Bank"
+msgstr "البنك"
+
+#: vipadmin/models.py:104
+msgid "Crypto"
+msgstr "عملة مشفرة"
+
+#: vipadmin/models.py:108
+msgid "Fiction"
+msgstr "خيال"
+
+#: vipadmin/models.py:109
+msgid "Non-Fiction"
+msgstr "غير خيالي"
+
+#: vipadmin/models.py:110
+msgid "Science Fiction"
+msgstr "خيال علمي"
+
+#: vipadmin/schema.py:285
+msgid "Hello, world!"
+msgstr "مرحبًا، عالم!"
