@@ -4,28 +4,25 @@ services:
   django:
     build:
       context: .
-      dockerfile: Dockerfile  # Ensure this matches the actual file name
-    image: django_app:latest  # Explicitly set the image name and tag
+      dockerfile: Dockerfile  # Only one Dockerfile for Django
+    image: django_app:latest
     container_name: django_app
     ports:
       - "8000:8000"
-    # env_file:
-    #   - /root/.env
     networks:
       - webnet
+    # depends_on:
+    #   - db  # Assuming you have a DB service
 
   nginx:
-    build:
-        context: .
-        dockerfile: Dockerfile.nginx  # Ensure this matches the actual file name
-    image: nginx:latest
+    image: nginx:latest  # Directly use the Nginx image
     container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./certs:/etc/ssl/certs
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Your custom Nginx config
+      - ./certs:/etc/ssl/certs  # SSL certificates if you're using HTTPS
     networks:
       - webnet
     depends_on:
@@ -33,3 +30,4 @@ services:
 
 networks:
   webnet:
+    driver: bridge
