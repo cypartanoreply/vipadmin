@@ -15,14 +15,16 @@ services:
     #   - db  # Assuming you have a DB service
 
   nginx:
-    image: nginx:latest  # Directly use the Nginx image
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx  # Use the custom Dockerfile for Nginx
     container_name: nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf  # Your custom Nginx config
-      - ./certs:/etc/ssl/certs  # SSL certificates if you're using HTTPS
+      # - ./certs:/etc/ssl/certs  # SSL certificates if you're using HTTPS
     networks:
       - webnet
     depends_on:
