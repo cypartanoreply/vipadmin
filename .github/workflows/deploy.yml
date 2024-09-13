@@ -76,7 +76,7 @@ jobs:
           # Load environment variables from .env file
           export $(grep -v '^#' /root/.env | xargs)
           # Load the Docker image
-          docker load -i /root/django_app.tar
+          docker load -i /root/django_app.tar/django_app.tar
           # Find the directory with docker-compose.yml
           COMPOSE_DIR=$(find / -name "docker-compose.yml" 2>/dev/null | xargs dirname | head -n 1)  # Find directory
           # Change to the directory with docker-compose.yml
