@@ -65,6 +65,15 @@ jobs:
         local_path: './django_app.tar'
         remote_path: '/root/django_app.tar'
         sftpArgs: '-o ConnectTimeout=5'
+   - name: Upload nginx.conf Droplet via SFTP
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        username: ${{ secrets.DROPLET_USERNAME }}
+        server: ${{ secrets.DROPLET_IP }}
+        password: ${{ secrets.DROPLET_PASSWORD }}
+        local_path: './nginx.conf'
+        remote_path: '/root/nginx.conf'
+        sftpArgs: '-o ConnectTimeout=5'
 
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v0.1.7
