@@ -10,13 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Uncomment and configure the artifact cleanup step if needed
     # - name: Remove old artifacts
     #   uses: c-hive/gha-remove-artifacts@v1
     #   with:
     #     age: '1 days' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
-        # Optional inputs
-        # skip-tags: true
-        # skip-recent: 5
+    #     skip-tags: true
+    #     skip-recent: 5
+
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -36,11 +37,10 @@ jobs:
 
     - name: Save Docker image as tarball
       run: |
-        docker images
         docker save django_app:latest -o django_app.tar
 
     - name: Upload Docker image artifact
-      uses: actions/upload-artifact@v4  # Updated to v3
+      uses: actions/upload-artifact@v4
       with:
         name: django_app.tar
         path: django_app.tar
@@ -65,15 +65,16 @@ jobs:
         local_path: './django_app.tar'
         remote_path: '/root/django_app.tar'
         sftpArgs: '-o ConnectTimeout=5'
-    - name: Upload nginx.conf Droplet via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.DROPLET_USERNAME }}
-          server: ${{ secrets.DROPLET_IP }}
-          password: ${{ secrets.DROPLET_PASSWORD }}
-          local_path: './nginx.conf'
-          remote_path: '/root/nginx.conf'
-          sftpArgs: '-o ConnectTimeout=5'
+
+    - name: Upload nginx.conf to Droplet via SFTP
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        username: ${{ secrets.DROPLET_USERNAME }}
+        server: ${{ secrets.DROPLET_IP }}
+        password: ${{ secrets.DROPLET_PASSWORD }}
+        local_path: './nginx.conf'
+        remote_path: '/root/nginx.conf'
+        sftpArgs: '-o ConnectTimeout=5'
 
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v0.1.7
@@ -85,11 +86,11 @@ jobs:
           # Load environment variables from .env file
           export $(grep -v '^#' /root/.env | xargs)
           # Load the Docker image
-          docker load -i /root/django_app.tar/django_app.tar
+          docker load -i /root/django_app.tar
           # Find the directory with docker-compose.yml
           COMPOSE_DIR=$(find / -name "docker-compose.yml" 2>/dev/null | xargs dirname | head -n 1)  # Find directory
           # Change to the directory with docker-compose.yml
           cd $COMPOSE_DIR
           # Bring down existing containers and bring up new ones
-          docker compose down || true
-          docker compose up -d
+          docker-compose down || true
+          docker-compose up -d
