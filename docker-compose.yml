@@ -1,34 +1,83 @@
+# version: '3.8'
+
+# services:
+#   django:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile  # Only one Dockerfile for Django
+#     image: django_app:latest
+#     container_name: django_app
+#     ports:
+#       - "8000:8000"
+#     networks:
+#       - webnet
+#     # depends_on:
+#     #   - db  # Assuming you have a DB service
+
+#   nginx:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.nginx  # Use the custom Dockerfile for Nginx
+#     container_name: nginx
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     # volumes:
+#     #   - ./nginx.conf:/etc/nginx/nginx.conf  # Your custom Nginx config
+#     #   # - ./certs:/etc/ssl/certs  # SSL certificates if you're using HTTPS
+#     networks:
+#       - webnet
+#     depends_on:
+#       - django
+
+# networks:
+#   webnet:
+#     driver: bridge
+
+
+
+
+
 version: '3.8'
 
 services:
   django:
     build:
       context: .
-      dockerfile: Dockerfile  # Only one Dockerfile for Django
+      dockerfile: Dockerfile  # Your Django Dockerfile
     image: django_app:latest
     container_name: django_app
     ports:
       - "8000:8000"
     networks:
       - webnet
-    # depends_on:
-    #   - db  # Assuming you have a DB service
+    depends_on:
+      - nginx
 
   nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx  # Use the custom Dockerfile for Nginx
+    image: nginx:latest
     container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/www:/var/www/certbot  # For certbot to handle the challenge
+      - ./certbot/conf:/etc/letsencrypt  # For storing certificates
     ports:
       - "80:80"
       - "443:443"
-    # volumes:
-    #   - ./nginx.conf:/etc/nginx/nginx.conf  # Your custom Nginx config
-    #   # - ./certs:/etc/ssl/certs  # SSL certificates if you're using HTTPS
     networks:
       - webnet
     depends_on:
       - django
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - webnet
 
 networks:
   webnet:

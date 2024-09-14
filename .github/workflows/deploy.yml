@@ -84,3 +84,15 @@ jobs:
           # Bring down existing containers and bring up new ones
           docker compose down || true
           docker compose up -d
+
+    - name: Generate SSL Certificates via Certbot
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.DROPLET_IP }}
+        username: ${{ secrets.DROPLET_USERNAME }}
+        password: ${{ secrets.DROPLET_PASSWORD }}
+        script: |
+          # Run certbot to generate SSL certificate
+          docker-compose run certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
+          # Reload Nginx to apply the new certificates
+          docker-compose exec nginx nginx -s reload        
