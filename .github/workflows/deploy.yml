@@ -32,7 +32,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker-compose build
+        docker compose build
         docker images  # Confirm the build
 
     - name: Save Docker image as tarball
@@ -93,6 +93,6 @@ jobs:
         password: ${{ secrets.DROPLET_PASSWORD }}
         script: |
           # Run certbot to generate SSL certificate
-          docker-compose run certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
+          docker-compose run certbot certonly --webroot --webroot-path=/var/www/certbot --email your-email@example.com --agree-tos --no-eff-email -d vipapi.cyparta.com
           # Reload Nginx to apply the new certificates
           docker-compose exec nginx nginx -s reload        
