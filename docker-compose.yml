@@ -51,8 +51,8 @@ services:
       - "8000:8000"
     networks:
       - webnet
-    depends_on:
-      - nginx
+    # depends_on:
+    #   - nginx
 
   nginx:
     image: nginx:latest
@@ -66,8 +66,8 @@ services:
       - "443:443"
     networks:
       - webnet
-    depends_on:
-      - django
+    # depends_on:
+    #   - django
 
   certbot:
     image: certbot/certbot
