@@ -23,8 +23,8 @@ services:
     container_name: nginx
     volumes:
       #- ./nginx.conf:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot  # For certbot to handle the challenge
-      - ./certbot/conf:/etc/letsencrypt  # For storing certificates
+      - ./certbot/www:/var/www/certbot:ro  # For certbot to handle the challenge
+      - ./certbot/conf:/etc/letsencrypt:ro  # For storing certificates
     ports:
       - "80:80"
       - "443:443"
@@ -39,8 +39,8 @@ services:
     container_name: certbot
     #entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
     volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt:rw
+      - ./certbot/www:/var/www/certbot:rw
     # networks:
     #   - webnet
 
