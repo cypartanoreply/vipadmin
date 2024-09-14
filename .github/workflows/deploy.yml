@@ -76,15 +76,18 @@ jobs:
             # Bring down existing containers and bring up new ones
             docker compose down || true
             docker compose up -d
+            # Wait for Nginx to start up
+            echo "Waiting for Nginx to start..."
+            sleep 10
 
-            # Clean up existing Certbot containers (if any)
+            # Run Certbot to generate SSL certificate
+            docker compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
+
+            # Reload Nginx to apply the new certificates
+            docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
+
+            # Clean up Certbot container
             docker rm -f $(docker ps -a -q --filter="name=certbot") || true
-
-            # Run certbot to generate SSL certificate
-            docker compose run certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
-
-            # Reload Nginx to apply the new certificates, run in the background
-            #docker exec $(docker ps -q --filter="name=nginx") nginx -s reload 
 
             # Force exit to close the SSH session
             exit 0
