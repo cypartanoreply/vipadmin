@@ -62,7 +62,7 @@ services:
       - ./certbot/www:/var/www/certbot  # For certbot to handle the challenge
       - ./certbot/conf:/etc/letsencrypt  # For storing certificates
     ports:
-      - "80:80"
+      - "8080:80"
       - "8443:443"
     networks:
       - webnet
