@@ -83,7 +83,8 @@ jobs:
             # Run certbot to generate SSL certificate
             docker compose run certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
 
-            # Reload Nginx to apply the new certificates
-            docker compose exec nginx nginx -s reload
-            #Force exit to close the SSH session
+            # Reload Nginx to apply the new certificates, run in the background
+            docker exec $(docker ps -q --filter="name=nginx") nginx -s reload &
+
+            # Force exit to close the SSH session
             exit 0
