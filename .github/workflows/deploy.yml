@@ -81,7 +81,7 @@ jobs:
             sleep 10
 
             # Run Certbot to generate SSL certificate
-            timeout 300 docker compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com
+            docker compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com &
 
             # Reload Nginx to apply the new certificates
             docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
