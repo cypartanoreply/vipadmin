@@ -85,3 +85,5 @@ jobs:
 
             # Reload Nginx to apply the new certificates
             docker compose exec nginx nginx -s reload
+            #Force exit to close the SSH session
+            exit 0
