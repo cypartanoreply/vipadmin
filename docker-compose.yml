@@ -13,8 +13,7 @@ services:
       - webnet
     # environment:
     #   # Environment variables (Add if needed)
-    depends_on:
-      - nginx
+   
 
   nginx:
     build:
@@ -29,8 +28,7 @@ services:
       - "443:443"
     networks:
       - webnet
-    depends_on:
-      - django
+
 
   certbot:
     image: certbot/certbot
