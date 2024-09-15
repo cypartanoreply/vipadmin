@@ -1,49 +1,47 @@
-
-
-
-
 version: '3.8'
 
 services:
   django:
     build:
       context: .
-      dockerfile: Dockerfile  # Your Django Dockerfile
+      dockerfile: Dockerfile
     image: django_app:latest
     container_name: django_app
     ports:
       - "8000:8000"
     networks:
       - webnet
-    # depends_on:
-    #   - nginx
+    environment:
+      # Environment variables (Add if needed)
+    depends_on:
+      - nginx
 
   nginx:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     container_name: nginx
     volumes:
-      #- ./nginx.conf:/etc/nginx/conf.d/
-      - ./certbot/www:/var/www/certbot:ro  # For certbot to handle the challenge
-      - ./certbot/conf:/etc/letsencrypt:ro  # For storing certificates
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
     ports:
       - "80:80"
       - "443:443"
     networks:
       - webnet
-    restart: always
-    # depends_on:
-    #   - django
+    depends_on:
+      - django
 
   certbot:
     image: certbot/certbot
     container_name: certbot
-    #entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
     volumes:
-      - ./certbot/conf:/etc/letsencrypt:rw
-      - ./certbot/www:/var/www/certbot:rw
-    # networks:
-    #   - webnet
-    ##
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h; done'"
+    networks:
+      - webnet
+
 networks:
   webnet:
     driver: bridge
