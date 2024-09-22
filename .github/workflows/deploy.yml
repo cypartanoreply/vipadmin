@@ -47,7 +47,25 @@ jobs:
         with:
           name: django_app.tar
           retention-days: 1
-
+      - name: Clone Project onto Droplet
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          script: |
+            # Install Git if not installed
+            sudo apt-get update && sudo apt-get install -y git
+            # Set up GitHub authentication using PAT
+            export GITHUB_PAT=${{ secrets.GITHUBTOKEN_PAT }}
+            git config --global credential.helper 'store --file=/root/.git-credentials'
+            echo "https://${{ secrets.GITHUBTOKEN_PAT }}:@github.com" > /root/.git-credentials
+            # Clone the latest version of the project
+            if [ ! -d "/root/vipadmin" ]; then
+              git clone https://github.com/username/vipadmin.git /root/vipadmin
+            else
+              cd /root/vipadmin && git pull origin main
+            fi
       - name: Upload Docker Image to Droplet via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
