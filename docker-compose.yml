@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     image: django_app:latest
     container_name: django_app
+    volumes:
+      - ./vipadmin:/app  # Mount the project folder to the container
     ports:
       - "8000:8000"
     networks:
