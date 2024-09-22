@@ -50,7 +50,7 @@ jobs:
               git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
             else
               cd /root/vipadmin && git pull origin main
-
+            fi  
       - name: Deploy via SSH and Run Docker Compose
         uses: appleboy/ssh-action@v0.1.7
         with:
