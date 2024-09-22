@@ -86,7 +86,7 @@ jobs:
             # Reload Nginx to apply the new certificates
             docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
 
-            # Clean up Certbot container
+            ## Clean up Certbot container
             docker rm -f $(docker ps -a -q --filter="name=certbot") || true
 
             # Force exit to close the SSH session
