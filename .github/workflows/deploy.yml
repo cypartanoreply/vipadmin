@@ -27,27 +27,12 @@ jobs:
           docker compose build
           docker images  # Confirm the build
 
-      - name: Save Docker image as tarball
-        run: |
-          docker save django_app:latest -o django_app.tar
-
-      - name: Upload Docker image artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: django_app.tar
-          path: django_app.tar
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Download Docker image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: django_app.tar
-          retention-days: 1
-      - name: Clone Project onto Droplet
+      - name: SSH into Droplet and Clone Project
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_IP }}
@@ -57,55 +42,31 @@ jobs:
             # Install Git if not installed
             sudo apt-get update && sudo apt-get install -y git
             # Set up GitHub authentication using PAT
-            export GITHUB_PAT=${{ secrets.GITHUBTOKEN_PAT }}
+            export GITHUB_PAT=${{ secrets.GITHUB_PAT }}
             git config --global credential.helper 'store --file=/root/.git-credentials'
-            echo "https://${{ secrets.GITHUBTOKEN_PAT }}:@github.com" > /root/.git-credentials
-            # Clone the latest version of the project
+            echo "https://${{ secrets.GITHUB_PAT }}:@github.com" > /root/.git-credentials
+            # Clone the project repository
             if [ ! -d "/root/vipadmin" ]; then
-              git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
+              git clone https://github.com/username/vipadmin.git /root/vipadmin
             else
               cd /root/vipadmin && git pull origin main
-            fi
-      - name: Upload Docker Image to Droplet via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ secrets.DROPLET_USERNAME }}
-          server: ${{ secrets.DROPLET_IP }}
-          password: ${{ secrets.DROPLET_PASSWORD }}
-          local_path: './django_app.tar'
-          remote_path: '/root/django_app.tar'
-          sftpArgs: '-o ConnectTimeout=5'
 
-      - name: Deploy via SSH
+      - name: Deploy via SSH and Run Docker Compose
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
-            # Load environment variables from .env file
-            export $(grep -v '^#' /root/.env | xargs)
-            # Load the Docker image
-            docker load -i /root/django_app.tar/django_app.tar
-            # Find the directory with docker-compose.yml
-            COMPOSE_DIR=$(find / -name "docker-compose.yml" 2>/dev/null | xargs dirname | head -n 1)
-            # Change to the directory with docker-compose.yml
-            cd $COMPOSE_DIR
-            # Bring down existing containers and bring up new ones
+            # Navigate to the project directory
+            cd /root/vipadmin
+            # Bring down any existing containers
             docker compose down || true
-            docker compose up -d
-            # Wait for Nginx to start up
-            echo "Waiting for Nginx to start..."
-            #sleep 10
+            # Build and start containers with mounted project folder
+            docker compose up -d --build
 
-            # # Run Certbot to generate SSL certificate
-            # docker compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot --email eslamelhadedy50@gmail.com --agree-tos --no-eff-email -d vipapi.cyparta.com 
-
-            # Reload Nginx to apply the new certificates
+            # Reload Nginx if necessary
             docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
-
-            # ## Clean up Certbot container
-            # docker rm -f $(docker ps -a -q --filter="name=certbot") || true
 
             # Force exit to close the SSH session
             exit 0
