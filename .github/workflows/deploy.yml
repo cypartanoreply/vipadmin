@@ -58,6 +58,8 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
+            # Load environment variables from .env file
+            export $(grep -v '^#' /root/.env | xargs)
             # Navigate to the project directory
             cd /root/vipadmin
             # Bring down any existing containers
