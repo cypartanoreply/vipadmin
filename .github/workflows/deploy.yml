@@ -42,9 +42,9 @@ jobs:
             # Install Git if not installed
             sudo apt-get update && sudo apt-get install -y git
             # Set up GitHub authentication using PAT
-            export GITHUB_PAT=${{ secrets.GITHUB_PAT }}
+            export GITHUB_PAT=${{ secrets.GITHUBTOKEN_PAT }}
             git config --global credential.helper 'store --file=/root/.git-credentials'
-            echo "https://${{ secrets.GITHUB_PAT }}:@github.com" > /root/.git-credentials
+            echo "https://${{ secrets.GITHUBTOKEN_PAT }}:@github.com" > /root/.git-credentials
             # Clone the project repository
             if [ ! -d "/root/vipadmin" ]; then
               git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
