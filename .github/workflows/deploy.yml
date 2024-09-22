@@ -47,7 +47,7 @@ jobs:
             echo "https://${{ secrets.GITHUB_PAT }}:@github.com" > /root/.git-credentials
             # Clone the project repository
             if [ ! -d "/root/vipadmin" ]; then
-              git clone https://github.com/username/vipadmin.git /root/vipadmin
+              git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
             else
               cd /root/vipadmin && git pull origin main
 
