@@ -66,5 +66,5 @@ COPY . .
 # Expose the port that Uvicorn will run on
 EXPOSE 8000
 
-# Command to run the application using Uvicorn
+### Command to run the application using Uvicorn
 CMD ["uvicorn", "project.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
