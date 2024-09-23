@@ -13,9 +13,6 @@ services:
       - "8000:8000"
     networks:
       - webnet
-    # environment:
-    #   # Environment variables (Add if needed)
-   
 
   nginx:
     #build:

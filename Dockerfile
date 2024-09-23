@@ -22,8 +22,10 @@ RUN apt-get update \
 #
 ## Install Python dependencies
 COPY . .
+
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir --force-reinstall -r requirements.txt
+
 RUN pip install uvicorn
 # Copy the rest of the application code#
 #COPY . .
