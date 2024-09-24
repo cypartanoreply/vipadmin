@@ -67,7 +67,7 @@ jobs:
             docker compose up -d --build
 
             # Reload Nginx if necessary
-            docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
+            # docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
 
             # Force exit to close the SSH session
             exit 0
