@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to check if SSL certificate exists
-CERT_PATH="/etc/letsencrypt/live/memo.cyparta.com/fullchain.pem"
+CERT_PATH="/etc/nginx/ssl/live/memo.cyparta.com/fullchain.pem"
 
 # Wait for certbot to generate the SSL certificate
 while [ ! -f "$CERT_PATH" ]; do
