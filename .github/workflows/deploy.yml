@@ -1,0 +1,73 @@
+name: Django CI/CD with Uvicorn (No Docker Hub)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo snap install docker
+
+      - name: Build Docker Image
+        run: |
+          docker compose build
+          docker images  # Confirm the build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: SSH into Droplet and Clone Project
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          script: |
+            # Install Git if not installed
+            sudo apt-get update && sudo apt-get install -y git
+            # Set up GitHub authentication using PAT
+            export GITHUB_PAT=${{ secrets.GITHUBTOKEN_PAT }}
+            git config --global credential.helper 'store --file=/root/.git-credentials'
+            echo "https://${{ secrets.GITHUBTOKEN_PAT }}:@github.com" > /root/.git-credentials
+            # Clone the project repository
+            if [ ! -d "/root/vipadmin" ]; then
+              git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
+            else
+              cd /root/vipadmin && git pull origin main
+            fi  
+      - name: Deploy via SSH and Run Docker Compose
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: ${{ secrets.DROPLET_USERNAME }}
+          password: ${{ secrets.DROPLET_PASSWORD }}
+          script: |
+            # Load environment variables from .env file
+            export $(grep -v '^#' /root/.env | xargs)
+            # Navigate to the project directory
+            cd /root/vipadmin
+            # Bring down any existing containers
+            docker compose down || true
+            # Build and start containers with mounted project folder
+            docker compose up -d --build
+
+            # Reload Nginx if necessary
+            docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
+
+            # Force exit to close the SSH session
+            exit 0
