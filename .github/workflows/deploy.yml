@@ -19,7 +19,7 @@ jobs:
       - name: Install Docker Compose
         run: |
           sudo apt-get update
-          snap install docker
+          sudo snap install docker
 
       - name: Build Docker Image
         run: |
