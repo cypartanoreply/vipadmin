@@ -61,15 +61,22 @@ jobs:
               cd /root/$REPO_NAME && git pull origin $BRANCH_NAME
             fi 
 
-      - name: Replace DOMAIN_NAME in NGINX Configs
+
+      - name: Deploy via SSH and Run Docker Compose
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DROPLET_IP }}
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
+          
+            # Load environment variables from .env file
+            export $(grep -v '^#' /root/.env | xargs)
+
             # Navigate to the project directory
             cd /root/$REPO_NAME
+            ######################################
+            
             echo "Current REPO_NAME is: $(REPO_NAME)"
             # Print the current working directory
             echo "Current directory is: $(pwd)"
@@ -86,19 +93,8 @@ jobs:
             cp /root/$REPO_NAME/nginx/conf/default.conf /root/$REPO_NAME/nginx/conf/default.conf
             cp /root/$REPO_NAME/nginx/conf/ssl.conf /root/$REPO_NAME/nginx/conf/ssl.conf
 
-      - name: Deploy via SSH and Run Docker Compose
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.DROPLET_IP }}
-          username: ${{ secrets.DROPLET_USERNAME }}
-          password: ${{ secrets.DROPLET_PASSWORD }}
-          script: |
-            # Load environment variables from .env file
-            export $(grep -v '^#' /root/.env | xargs)
 
-            # Navigate to the project directory
-            cd /root/$REPO_NAME
-
+            ##########################################
             # Bring down any existing containers
             DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker-compose down || true
 
