@@ -7,7 +7,7 @@ on:
 
 env:
   DOMAIN_NAME: ${{ vars.DOMAIN_NAME }}  # GitHub Actions variable for the domain name
-  REPO_NAME: ${{ github.repository }}
+  #REPO_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -73,7 +73,7 @@ jobs:
           
             # Load environment variables from .env file
             export $(grep -v '^#' /root/.env | xargs)
-
+            REPO_NAME=${{ github.repository }}
             # Navigate to the project directory
             cd /root/{{REPO_NAME}}
             ######################################
