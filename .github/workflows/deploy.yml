@@ -70,14 +70,19 @@ jobs:
           username: ${{ secrets.DROPLET_USERNAME }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
-          
             # Load environment variables from .env file
             export $(grep -v '^#' /root/.env | xargs)
-            REPO_NAME=${{ github.repository }}
+
+            # Use REPO_NAME dynamically by defining it
+            REPO_NAME=$(basename -s .git https://github.com/${{ github.repository }})
+
             # Navigate to the project directory
-            cd /root/{{REPO_NAME}}
-            ######################################
-            echo {{REPO_NAME}}
+            echo "Navigating to /root/$REPO_NAME"
+            cd /root/$REPO_NAME || { echo "Directory /root/$REPO_NAME not found"; exit 1; }
+
+            # Print the current directory for verification
+            pwd
+
             # Replace the placeholder {{DOMAIN_NAME}} with the actual domain name in NGINX configs
             sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/default.conf.template
             sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/ssl.conf.template
@@ -86,7 +91,6 @@ jobs:
             cp nginx/conf/default.conf.template nginx/conf/default.conf
             cp nginx/conf/ssl.conf.template nginx/conf/ssl.conf
 
-            ##########################################
             # Bring down any existing containers
             DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker-compose down || true
 
