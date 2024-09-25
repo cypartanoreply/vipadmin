@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SSL_CERT="/etc/nginx/ssl/live/memo.cyparta.com/fullchain.pem"
-SSL_KEY="/etc/nginx/ssl/live/memo.cyparta.com/privkey.pem"
+SSL_CERT="/etc/nginx/ssl/live/testmemo.cyparta.com/fullchain.pem"
+SSL_KEY="/etc/nginx/ssl/live/testmemo.cyparta.com/privkey.pem"
 SSL_CONF="/etc/nginx/conf.d/ssl.conf"
 SSL_TEMPLATE="/etc/nginx/conf.d/ssl.conf.template"
 

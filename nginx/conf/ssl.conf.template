@@ -1,9 +1,9 @@
 server {
     listen 443 ssl;
-    server_name memo.cyparta.com;
+    server_name testmemo.cyparta.com;
 
-    ssl_certificate /etc/nginx/ssl/live/memo.cyparta.com/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/live/memo.cyparta.com/privkey.pem;
+    ssl_certificate /etc/nginx/ssl/live/testmemo.cyparta.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/testmemo.cyparta.com/privkey.pem;
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers on;

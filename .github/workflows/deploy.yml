@@ -25,7 +25,7 @@ jobs:
         run: |
           docker compose build
           docker images  # Confirm the build
-
+#ddsds
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -40,16 +40,22 @@ jobs:
           script: |
             # Install Git if not installed
             sudo apt-get update && sudo apt-get install -y git
-            # Set up GitHub authentication using PAT
-            export GITHUB_PAT=${{ secrets.GITHUBTOKEN_PAT }}
+
+            # Set up GitHub authentication using GitHub Token
             git config --global credential.helper 'store --file=/root/.git-credentials'
-            echo "https://${{ secrets.GITHUBTOKEN_PAT }}:@github.com" > /root/.git-credentials
-            # Clone the project repository
-            if [ ! -d "/root/vipadmin" ]; then
-              git clone https://github.com/cypartanoreply/vipadmin /root/vipadmin
+            echo "https://${{ github.token }}:@github.com" > /root/.git-credentials
+
+            # Dynamically get repository name and branch
+            REPO_NAME=$(basename -s .git https://github.com/${{ github.repository }})
+            REPO_URL=https://github.com/${{ github.repository }}
+            BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+            # Clone the project repository into a directory named after the repo
+            if [ ! -d "/root/$REPO_NAME" ]; then
+              git clone --branch $BRANCH_NAME $REPO_URL /root/$REPO_NAME
             else
-              cd /root/vipadmin && git pull origin main
-            fi  
+              cd /root/$REPO_NAME && git pull origin $BRANCH_NAME
+            fi 
       - name: Deploy via SSH and Run Docker Compose
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -60,7 +66,7 @@ jobs:
             # Load environment variables from .env file
             export $(grep -v '^#' /root/.env | xargs)
             # Navigate to the project directory
-            cd /root/vipadmin
+            cd /root/$REPO_NAME
             # Bring down any existing containers
             docker compose down || true
             # Build and start containers with mounted project folder
