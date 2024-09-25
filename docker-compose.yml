@@ -38,6 +38,7 @@ services:
       - "80:80"
       - "443:443"
     restart: always
+    command: /bin/bash -c "/scripts/check_and_enable_ssl.sh && nginx -g 'daemon off;'"
     #command: /bin/bash -c "nginx -g 'daemon off;' && /scripts/enable_ssl.sh"
     networks:
       - webnet

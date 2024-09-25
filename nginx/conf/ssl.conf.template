@@ -1,23 +1,9 @@
-
-server {
-    listen 80;
-    server_name memo.cyparta.com;
-    
-    location / {
-        return 301 https://$host$request_uri;
-    }
-
-    location /.well-known/acme-challenge/ {
-        root /var/www/certbot;
-    }
-}
-
 server {
     listen 443 ssl;
     server_name memo.cyparta.com;
 
-    ssl_certificate /etc/nginx/ssl/live/memo.cyparta.com/fullchain.pem optional;
-    ssl_certificate_key /etc/nginx/ssl/live/memo.cyparta.com/privkey.pem optional;
+    ssl_certificate /etc/nginx/ssl/live/memo.cyparta.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/memo.cyparta.com/privkey.pem;
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_prefer_server_ciphers on;
