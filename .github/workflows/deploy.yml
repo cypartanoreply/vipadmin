@@ -70,8 +70,13 @@ jobs:
           script: |
             # Navigate to the project directory
             cd /root/$REPO_NAME
-            pwd
-            ls
+            # Print the current working directory
+            echo "Current directory is: $(pwd)"
+
+            # List the contents of the current directory
+            echo "Listing project directory contents:"
+            echo "$(ls -la)"
+
             # Replace the placeholder {{DOMAIN_NAME}} with the actual domain name in NGINX configs
             sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/default.conf
             sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/ssl.conf
