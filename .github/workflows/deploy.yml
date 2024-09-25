@@ -78,12 +78,12 @@ jobs:
             echo "$(ls -la)"
 
             # Replace the placeholder {{DOMAIN_NAME}} with the actual domain name in NGINX configs
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/default.conf
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/ssl.conf
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/$REPO_NAME/nginx/conf/default.conf
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/$REPO_NAME/nginx/conf/ssl.conf
 
             # Move the updated template files to their final locations
-            cp nginx/conf/default.conf nginx/conf/default.conf
-            cp nginx/conf/ssl.conf nginx/conf/ssl.conf
+            cp /root/$REPO_NAME/nginx/conf/default.conf /root/$REPO_NAME/nginx/conf/default.conf
+            cp /root/$REPO_NAME/nginx/conf/ssl.conf /root/$REPO_NAME/nginx/conf/ssl.conf
 
       - name: Deploy via SSH and Run Docker Compose
         uses: appleboy/ssh-action@v0.1.7
