@@ -75,25 +75,16 @@ jobs:
             export $(grep -v '^#' /root/.env | xargs)
 
             # Navigate to the project directory
-            cd /root/{{DOMAIN_NAME}}
+            cd /root/{{REPO_NAME}}
             ######################################
-
-            echo "Current REPO_NAME is: $(REPO_NAME)"
-            # Print the current working directory
-            echo "Current directory is: $(pwd)"
-
-            # List the contents of the current directory
-            echo "Listing project directory contents:"
-            echo "$(ls -la)"
-
+            echo {{REPO_NAME}}
             # Replace the placeholder {{DOMAIN_NAME}} with the actual domain name in NGINX configs
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/{{DOMAIN_NAME}}/nginx/conf/default.conf
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/default.conf.template
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" nginx/conf/ssl.conf.template
 
             # Move the updated template files to their final locations
-            cp /root/{{DOMAIN_NAME}}E/nginx/conf/default.conf /root/{{DOMAIN_NAME}}/nginx/conf/default.conf
-            cp /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf
-
+            cp nginx/conf/default.conf.template nginx/conf/default.conf
+            cp nginx/conf/ssl.conf.template nginx/conf/ssl.conf
 
             ##########################################
             # Bring down any existing containers
