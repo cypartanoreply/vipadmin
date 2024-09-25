@@ -75,7 +75,7 @@ jobs:
             export $(grep -v '^#' /root/.env | xargs)
 
             # Navigate to the project directory
-            cd /root/$REPO_NAME
+            cd /root/{{DOMAIN_NAME}}
             ######################################
 
             echo "Current REPO_NAME is: $(REPO_NAME)"
@@ -87,12 +87,12 @@ jobs:
             echo "$(ls -la)"
 
             # Replace the placeholder {{DOMAIN_NAME}} with the actual domain name in NGINX configs
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/$REPO_NAME/nginx/conf/default.conf
-            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/$REPO_NAME/nginx/conf/ssl.conf
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/{{DOMAIN_NAME}}/nginx/conf/default.conf
+            sed -i "s/{{DOMAIN_NAME}}/${{ vars.DOMAIN_NAME }}/g" /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf
 
             # Move the updated template files to their final locations
-            cp /root/$REPO_NAME/nginx/conf/default.conf /root/$REPO_NAME/nginx/conf/default.conf
-            cp /root/$REPO_NAME/nginx/conf/ssl.conf /root/$REPO_NAME/nginx/conf/ssl.conf
+            cp /root/{{DOMAIN_NAME}}E/nginx/conf/default.conf /root/{{DOMAIN_NAME}}/nginx/conf/default.conf
+            cp /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf /root/{{DOMAIN_NAME}}/nginx/conf/ssl.conf
 
 
             ##########################################
