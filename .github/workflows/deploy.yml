@@ -70,6 +70,7 @@ jobs:
           script: |
             # Navigate to the project directory
             cd /root/$REPO_NAME
+            echo "Current REPO_NAME is: $(REPO_NAME)"
             # Print the current working directory
             echo "Current directory is: $(pwd)"
 
