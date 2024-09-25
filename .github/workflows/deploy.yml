@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker compose build
+          DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker compose build
           docker images  # Confirm the build
 #ddsds
   deploy:
@@ -68,12 +68,10 @@ jobs:
             # Navigate to the project directory
             cd /root/$REPO_NAME
             # Bring down any existing containers
-            docker compose down || true
+            DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker compose down || true
             # Build and start containers with mounted project folder
-            docker compose up -d --build
+            DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker compose up -d --build
 
-            # Reload Nginx if necessary
-            # docker exec $(docker ps -q --filter="name=nginx") nginx -s reload
-
+           
             # Force exit to close the SSH session
             exit 0
