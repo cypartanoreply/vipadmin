@@ -96,6 +96,8 @@ jobs:
 
             # Build and start containers with the updated configuration
             DOMAIN_NAME=${{ vars.DOMAIN_NAME }} docker-compose up -d --build
-
+            
+            echo "Cleaning up old and unused Docker images"
+            docker image prune -a -f
             # Force exit to close the SSH session
             exit 0
